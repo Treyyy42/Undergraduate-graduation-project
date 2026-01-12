@@ -75,34 +75,12 @@ for i = 1:nLegs
     theta(i) = atan2(d_ci(3), d_ci(1));
 end
 
-%% 6. 示例：打印结果并绘制关节角随平台位姿变化曲线
+%% 6. 示例：打印结果
 fprintf('=== 执行器长度 d_i ===\n');
 disp(leg_length.');
 
 fprintf('=== 主动关节角 theta_i (rad) ===\n');
 disp(theta.');
-
-% 令平台沿 Z 方向平移，绘制关节角变化
-z_list = linspace(0.35, 0.55, 30);
-theta_z = zeros(nLegs, numel(z_list));
-
-for k = 1:numel(z_list)
-    p_k = [p(1); p(2); z_list(k)];
-    for i = 1:nLegs
-        D_k = p_k + A_BR * b(:, i) - a(:, i);
-        d_ci = A_CiR(:, :, i).' * D_k;
-        theta_z(i, k) = atan2(d_ci(3), d_ci(1));
-    end
-end
-
-figure('Name', 'Joint Angles vs Platform Z');
-plot(z_list, theta_z.');
-grid on;
-xlabel('Platform z (m)');
-ylabel('\theta_i (rad)');
-legend(arrayfun(@(i) sprintf('\\theta_%d', i), 1:nLegs, 'UniformOutput', false));
-
-title('主动关节角随平台 Z 位移变化');
 
 %% 7. 绘制机构简图（固定/动平台与三条支链）
 figure('Name', '3-RRPS Mechanism Schematic');
